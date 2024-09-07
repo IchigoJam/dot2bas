@@ -1,20 +1,19 @@
 
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
 <title>multidots</title>
-<script defer src="util.js"></script><script defer src="help2.js"></script>
-<script>"use strict";
+<script type="module">
+const create = tag => document.createElement(tag);
 var canvas;
 var field;
 var bkx, bky;
 window.onload = function() {
 	var w = 8;
-	var box = $('box');
 	for (var i = 0; i < w * w; i++) {
 		var div = create('div');
 		div.onmousedown = function(e) {
 			var div = e.srcElement;
 			div.style.background = div.style.background == 'black' ? 'white' : 'black';
-			sendMessage();
+			//sendMessage();
 		}
 		box.appendChild(div);
 	}
@@ -22,7 +21,7 @@ window.onload = function() {
 };
 var divToString = function() {
 	var s = '';
-	var divs = $('box').childNodes;
+	var divs = box.childNodes;
 	for (var i = 0; i < divs.length; i++) {
 		s += divs[i].style.background == 'black' ? '1' : '0';
 	}
@@ -33,7 +32,7 @@ var stringToDiv = function(s) {
 	if (s == null)
 		return;
 	s = hex2bin(s);
-	var divs = $('box').childNodes;
+	var divs = box.childNodes;
 	for (var i = 0; i < divs.length && i < s.length; i++) {
 		divs[i].style.background = s.charAt(i) == '1' ? 'black' : 'white';
 	}
@@ -61,70 +60,6 @@ var hex2bin = function(s) {
 	}
 	return res;
 };
-// -- connection
-var Connection = function(url) {
-	this.url = url;
-};
-Connection.prototype = {
-	send: function(data) {
-		this.open(data);
-	},
-	open: function(data) {
-		if (this.ws != null) {
-			if (data != null)
-				this.ws.send(data);
-		} else {
-			var ws = new WebSocket(this.url);
-			var con = this;
-			ws.onopen = function() {
-				if (con.onopen != null)
-					con.onopen();
-				if (data != null)
-					ws.send(data);
-			};
-			ws.onclose = function() {
-				if (con.onclose != null)
-					con.onclose();
-				con.ws = null;
-			};
-			ws.onmessage = function(e) {
-				if (con.onmessage != null)
-					con.onmessage(e);
-			};
-			ws.onerror = function(e) {
-				if (con.onerror != null)
-					con.onerror(e);
-			};
-			this.ws = ws;
-		}
-	},
-};
-
-var ws = new Connection("ws://fukuno.jig.jp:8090/multidots");
-//var ws = new Connection("ws://localhost:8090/multidots");
-
-ws.onopen = function(event) {
-	console.log("websocket open");
-	stateChange("opened")
-};
-ws.onmessage = function(event) {
-	stringToDiv(event.data);
-};
-ws.onclose = function(event) {
-	console.log("websocket close");
-	stateChange("closed");
-};
-ws.onerror = function(event) {
-//	alert("error");
-	console.log("error");
-	stateChange("error")
-};
-function sendMessage() {
-	ws.send(divToString());
-}
-function stateChange(state) {
-	$("state").innerHTML = state;
-}
 </script>
 <style>
 a:link {
