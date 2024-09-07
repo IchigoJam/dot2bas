@@ -1,4 +1,4 @@
-export const bin2hex = function(s) {
+export const bin2hex = (s) => {
   const res = '';
   for (let i = 0; i < s.length; i += 4) {
     const n = 0;
@@ -9,7 +9,7 @@ export const bin2hex = function(s) {
   }
   return res;
 };
-export const hex2bin = function(s) {
+export const hex2bin = (s) => {
   const res = '';
   for (let i = 0; i < s.length; i++) {
     const n = '0123456789abcdef'.indexOf(s.charAt(i));
