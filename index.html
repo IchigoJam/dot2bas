@@ -2,63 +2,48 @@
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
 <title>multidots</title>
 <script type="module">
-const create = tag => document.createElement(tag);
-var canvas;
-var field;
-var bkx, bky;
-window.onload = function() {
-	var w = 8;
-	for (var i = 0; i < w * w; i++) {
-		var div = create('div');
-		div.onmousedown = function(e) {
-			var div = e.srcElement;
-			div.style.background = div.style.background == 'black' ? 'white' : 'black';
-			//sendMessage();
-		}
-		box.appendChild(div);
-	}
-	ws.open();
-};
-var divToString = function() {
-	var s = '';
-	var divs = box.childNodes;
-	for (var i = 0; i < divs.length; i++) {
+import { bin2hex, hex2bin } from "./binhex.js";
+
+const divToString = function() {
+	const s = '';
+	const divs = box.childNodes;
+	for (let i = 0; i < divs.length; i++) {
 		s += divs[i].style.background == 'black' ? '1' : '0';
 	}
 	s = bin2hex(s);
 	return s;
 };
-var stringToDiv = function(s) {
+const stringToDiv = function(s) {
 	if (s == null)
 		return;
 	s = hex2bin(s);
-	var divs = box.childNodes;
-	for (var i = 0; i < divs.length && i < s.length; i++) {
+	const divs = box.childNodes;
+	for (let i = 0; i < divs.length && i < s.length; i++) {
 		divs[i].style.background = s.charAt(i) == '1' ? 'black' : 'white';
 	}
 };
-var bin2hex = function(s) {
-	var res = '';
-	for (var i = 0; i < s.length; i += 4) {
-		var n = 0;
-		for (var j = 0; j < 4; j++) {
-			n += s.charAt(i + 3 - j) == '1' ? (1 << j) : 0;
-		}
-		res += '0123456789abcdef'.charAt(n);
-	}
-	return res;
+
+
+const create = tag => document.createElement(tag);
+let canvas;
+let field;
+let bkx, bky;
+
+const show = () => {
+
 };
-var hex2bin = function(s) {
-	var res = '';
-	for (var i = 0; i < s.length; i++) {
-		var n = '0123456789abcdef'.indexOf(s.charAt(i));
-		if (n < 0)
-			n = 0;
-		for (var j = 0; j < 4; j++) {
-			res += (n & (1 << (3 - j))) != 0 ? '1' : '0';
+
+window.onload = function() {
+	const w = 8;
+	for (let i = 0; i < w * w; i++) {
+		const div = create('div');
+		div.onmousedown = function(e) {
+			const div = e.srcElement;
+			div.style.background = div.style.background == 'black' ? 'white' : 'black';
+			show();
 		}
+		box.appendChild(div);
 	}
-	return res;
 };
 </script>
 <style>
