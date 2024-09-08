@@ -12,6 +12,7 @@
 <label><input type=radio name=radiohex id=radiohex checked>HEX</label>
 <label><input type=radio name=radiohex id=radiodec>DEC</label>
 </div>
+<button id=btnclear>CLEAR</button>
 
 <footer>
 <hr>
@@ -28,6 +29,7 @@ const show = () => {
   const s = getStringFromDiv(box);
   const hex = radiohex.checked;
   ta.value = hex2bas(s, hex);
+  location.hash = s;
 };
 
 const init = () => {
@@ -48,9 +50,21 @@ const init = () => {
 };
 
 window.onload = () => {
+  const hash = location.hash.substring(1);
+  radiow16.checked = hash.length == 64;
+
   init();
   radiow8.onchange = radiow16.onchange = () => init();
   radiohex.onchange = radiodec.onchange = () => show();
+
+  setStringToDiv(box, hash);
+  show();
+
+  btnclear.onclick = () => {
+    location.hash = "";
+    init();
+    show();
+  };
 };
 </script>
 <style>
@@ -61,8 +75,12 @@ body {
   margin: 0px;
   text-align: center;
 }
+h1 {
+  padding: 0;
+  margin: 0.5em;
+}
 #box {
-  margin: 30px auto 30px auto;
+  margin: 1em auto 1em auto;
   display: inline-grid;
   grid-template-columns: repeat(8, 1fr);
   line-height: 0px;
@@ -88,6 +106,10 @@ textarea {
   width: 80vw;
   height: 5em;
   font-size: 20px;  
+}
+#btnclear {
+  margin: .8em;
+  padding: .5em 2em;
 }
 </style>
 

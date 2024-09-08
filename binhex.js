@@ -10,11 +10,12 @@ export const bin2hex = (s) => {
   return res;
 };
 export const hex2bin = (s) => {
+  s = s.toLowerCase();
   let res = "";
   for (let i = 0; i < s.length; i++) {
     let n = "0123456789abcdef".indexOf(s.charAt(i));
     if (n < 0) n = 0;
-    for (const j = 0; j < 4; j++) {
+    for (let j = 0; j < 4; j++) {
       res += (n & (1 << (3 - j))) != 0 ? "1" : "0";
     }
   }

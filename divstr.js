@@ -28,7 +28,24 @@ export const setStringToDiv = (div, s) => {
   if (s == null) return;
   s = hex2bin(s);
   const divs = div.childNodes;
-  for (let i = 0; i < divs.length && i < s.length; i++) {
-    divs[i].style.background = s.charAt(i) == '1' ? 'black' : 'white';
+  if (divs.length == 64) {
+    for (let i = 0; i < divs.length && i < s.length; i++) {
+      divs[i].style.background = s[i] == '1' ? 'black' : 'white';
+    }
+  } else if (divs.length == 256) {
+    for (let j = 0; j < 4; j++) {
+      const offx = j % 2 * 8;
+      const offy = Math.floor(j / 2) * 8;
+      for (let i = 0; i < 64; i++) {
+        const x = offx + i % 8;
+        const y = offy + Math.floor(i / 8);
+        const idx = x + y * 16;
+        console.log("set", idx);
+        const si = i + j * 64;
+        divs[idx].style.background = s[si] == '1' ? 'black' : 'white';
+      }
+    }
+  } else {
+    throw new Error("not supported size");
   }
 };
