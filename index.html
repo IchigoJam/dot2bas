@@ -1,74 +1,48 @@
-
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
-<title>multidots</title>
+<title>dot2bas</title>
+</head><body>
+<h1>dot2bas</h1>
+<div id="box"></div>
+<textarea id="ta"></textarea>
+
+<footer>
+<hr>
+forked from: <a href="http://fukuno.jig.jp/2012/multidots">multidots みんなでドット絵 一日一創2012</a><br>
+<a href=https://github.com/ichigojam/dot2bas>src on GitHub</a><br>
+</footer>
+
+
 <script type="module">
-import { bin2hex, hex2bin } from "./binhex.js";
-
-const divToString = function() {
-  const s = '';
-  const divs = box.childNodes;
-  for (let i = 0; i < divs.length; i++) {
-    s += divs[i].style.background == 'black' ? '1' : '0';
-  }
-  s = bin2hex(s);
-  return s;
-};
-const stringToDiv = function(s) {
-  if (s == null)
-    return;
-  s = hex2bin(s);
-  const divs = box.childNodes;
-  for (let i = 0; i < divs.length && i < s.length; i++) {
-    divs[i].style.background = s.charAt(i) == '1' ? 'black' : 'white';
-  }
-};
-
-
-const create = tag => document.createElement(tag);
-let canvas;
-let field;
-let bkx, bky;
+import { getStringFromDiv, setStringToDiv } from "./divstr.js";
+import { hex2bas } from "./hex2bas.js";
 
 const show = () => {
-
+	const s = getStringFromDiv(box);
+	ta.value = hex2bas(s);
 };
 
 window.onload = function() {
   const w = 8;
   for (let i = 0; i < w * w; i++) {
-    const div = create('div');
-    div.onmousedown = function(e) {
-      const div = e.srcElement;
-      div.style.background = div.style.background == 'black' ? 'white' : 'black';
+    const div = document.createElement("div");
+    div.onmousedown = () => {
+      div.style.background = div.style.background == "black" ? "white" : "black";
       show();
-    }
+    };
     box.appendChild(div);
   }
 };
 </script>
 <style>
-a:link {
-  color: #77f;
-  text-decoration: none;
-}
-a:visited {
-  color: #33a;
-  text-decoration: none;
-}
-a:hover {
-  color: #33a;
-  text-decoration: underline;
-}
-a:active {
-  color: #33a;
-  text-decoration: underline;
+a {
+	color: gray !important;
 }
 body {
   margin: 0px;
   text-align: center;
 }
 #box {
-  margin: 100px auto 30px auto;
+  margin: 30px auto 30px auto;
   width: 256px;
   height: 256px;
   line-height: 0px;
@@ -88,18 +62,13 @@ button {
   border: 3px solid black;
   background: white;
 }
+textarea {
+	border: 2px solid black;
+	padding: 1em;
+	width: 80vw;
+	font-size: 20px;	
+}
 </style>
-<body>
-
-<div id='box'></div>
-<div id="state"></div>
-
-<div id='credit'><img id='help'><a href='http://fukuno.jig.jp/2012/'>(c)taisukef CED</a></div><div id='helptips'><div id='helptipscontent'>
-みんなでドット絵<br>
-<br>
-ドット絵ツール<a href=monodots>monodots</a>を、WebSocketを使ってみんなで共有してみました。<br>
-</div></div>
 
 </body>
 <html>
-
