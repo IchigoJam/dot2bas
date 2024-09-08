@@ -3,8 +3,23 @@ import { bin2hex, hex2bin } from "./binhex.js";
 export const getStringFromDiv = (div) => {
   const s = [];
   const divs = div.childNodes;
-  for (let i = 0; i < divs.length; i++) {
-    s.push(divs[i].style.background == 'black' ? '1' : '0');
+  if (divs.length == 64) {
+    for (let i = 0; i < divs.length; i++) {
+      s.push(divs[i].style.background == 'black' ? '1' : '0');
+    }
+  } else if (divs.length == 256) {
+    for (let j = 0; j < 4; j++) {
+      const offx = j % 2 * 8;
+      const offy = Math.floor(j / 2) * 8;
+      for (let i = 0; i < 64; i++) {
+        const x = offx + i % 8;
+        const y = offy + Math.floor(i / 8);
+        const idx = x + y * 16;
+        s.push(divs[idx].style.background == 'black' ? '1' : '0');
+      }
+    }
+  } else {
+    throw new Error("not supported size");
   }
   const hex = bin2hex(s.join(""));
   return hex;
