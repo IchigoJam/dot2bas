@@ -9,6 +9,7 @@
 <div id="box"></div>
 <textarea id="ta"></textarea>
 <div class="divhex">
+CHAR <input id=infirstch type=text value=224 style="display: inlino-black; width: 4em; font-size: 14px;"> 
 <label><input type=radio name=radiohex id=radiohex checked>HEX</label>
 <label><input type=radio name=radiohex id=radiodec>DEC</label>
 </div>
@@ -28,7 +29,8 @@ import { hex2bas } from "./hex2bas.js";
 const show = () => {
   const s = getStringFromDiv(box);
   const hex = radiohex.checked;
-  ta.value = hex2bas(s, hex);
+  const firstch = infirstch.value;
+  ta.value = hex2bas(s, hex, firstch);
   location.hash = s;
 };
 
@@ -56,6 +58,7 @@ window.onload = () => {
   init();
   radiow8.onchange = radiow16.onchange = () => init();
   radiohex.onchange = radiodec.onchange = () => show();
+  infirstch.onchange = () => show();
 
   setStringToDiv(box, hash);
   show();
