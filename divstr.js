@@ -40,7 +40,6 @@ export const setStringToDiv = (div, s) => {
         const x = offx + i % 8;
         const y = offy + Math.floor(i / 8);
         const idx = x + y * 16;
-        console.log("set", idx);
         const si = i + j * 64;
         divs[idx].style.background = s[si] == '1' ? 'black' : 'white';
       }
